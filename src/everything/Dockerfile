@@ -1,21 +1,23 @@
-FROM node:22-alpine
+FROM node:22.12-alpine AS builder
 
-# Set working directory
+COPY . /app
+
 WORKDIR /app
 
-# Copy only package descriptor files first to leverage Docker cache
-COPY package*.json ./
+RUN --mount=type=cache,target=/root/.npm npm install
 
-# Install production dependencies only
-RUN npm ci --ignore-scripts --omit=dev
+FROM node:22-alpine AS release
 
-# Copy application source code
-COPY . .
+WORKDIR /app
 
-# Set production environment variable
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
+
 ENV NODE_ENV=production
 
-# Create an unprivileged user
+RUN npm ci --ignore-scripts --omit-dev
+
 RUN adduser \
   --disabled-password \
   --gecos "" \
@@ -23,10 +25,10 @@ RUN adduser \
   --shell "/sbin/nologin" \
   --no-create-home \
   --uid 10014 \
-  choreo
+  "choreo"
+# Use the above created unprivileged user
+USER 10014
 
-# Switch to the unprivileged user
-USER choreo
+EXPOSE 3001
 
-# Run the application
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/index.js", "streamableHttp"]

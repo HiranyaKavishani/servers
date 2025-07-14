@@ -1,0 +1,14 @@
+# +required The configuration file schema version
+schemaVersion: 1.2
+
+endpoints:
+  - name: mcp-test-everything
+    displayName: MCP Test Everything
+    service:
+      basePath: /
+      port: 3001
+    type: REST
+    networkVisibilities:
+      - Public
+      - Organization
+    schemaFilePath: openapi.yaml

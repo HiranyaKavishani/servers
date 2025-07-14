@@ -29,4 +29,6 @@ RUN adduser \
 # Use the above created unprivileged user
 USER 10014
 
+EXPOSE 3001
+
 CMD ["node", "dist/index.js", "streamableHttp"]

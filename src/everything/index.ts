@@ -2,7 +2,7 @@
 
 // Parse command line arguments first
 const args = process.argv.slice(2);
-const scriptName = args[0] || 'stdio';
+const scriptName = args[0] || 'streamableHttp';
 
 async function run() {
     try {

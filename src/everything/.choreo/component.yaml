@@ -5,7 +5,7 @@ endpoints:
   - name: mcp-test-everything
     displayName: MCP Test Everything
     service:
-      basePath: /mcp_everything
+      basePath: /
       port: 3001
     type: REST
     networkVisibilities:

@@ -1,17 +1,30 @@
 openapi: 3.0.3
 info:
   title: MCP API
-  description: OpenAPI specification for the /mcp GET endpoint
+  description: OpenAPI specification for the /mcp POST endpoint
   version: 1.0.0
 
 paths:
   /mcp:
-    get:
-      summary: Get MCP Data
-      description: Retrieves data from the MCP endpoint
+    post:
+      summary: Submit MCP Data
+      description: Accepts and processes data sent to the MCP endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "abc123"
+                value:
+                  type: string
+                  example: "sample data"
       responses:
-        '200':
-          description: Successful response
+        '201':
+          description: MCP data submitted successfully
           content:
             application/json:
               schema:
@@ -19,7 +32,8 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: MCP data fetched successfully
+                    example: MCP data submitted successfully
+        '400':
+          description: Bad request
         '500':
           description: Internal server error
-
